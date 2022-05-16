@@ -71,7 +71,7 @@ public class LindaBackupServer extends LindaServer {
         } catch (RemoteException e) {
             follow = false;
             update.cancel();
-            e.printStackTrace();
+            System.out.println("Warning the main server as fallen");
         }
     }
 
@@ -100,19 +100,15 @@ public class LindaBackupServer extends LindaServer {
             e.printStackTrace();
         }
         try {
-            System.out.println("Test" + sourceUri);
             var pat = Pattern.compile("(?:rmi://)?(.*):(\\d*)/(.*)");
-
             var m = pat.matcher(sourceUri);
             m.matches();
             var host = m.group(1);
             var rport = Integer.valueOf(m.group(2));
-            var remote = (LindaRemote) LocateRegistry.getRegistry(host, rport).lookup(m.group(3));
-            System.out.println("Test2");
 
-            System.out.println("Test3");
+            var remote = (LindaRemote) LocateRegistry.getRegistry(host, rport).lookup(m.group(3));
+
             LindaBackupServer backupServer = new LindaBackupServer(remote);
-            System.out.println("Test4");
 
             Registry registry = LocateRegistry.getRegistry(port);
             registry.bind("LindaBackupServer", backupServer);
