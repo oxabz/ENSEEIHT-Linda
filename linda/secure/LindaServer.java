@@ -178,7 +178,7 @@ public class LindaServer extends UnicastRemoteObject implements LindaRemote {
         return inner;
     }
 
-    public void changeRegister(ChangeCallback callback) {
+    public void changeRegister(ChangeCallback callback) throws RemoteException{
         this.callback.add(callback);
     }
 

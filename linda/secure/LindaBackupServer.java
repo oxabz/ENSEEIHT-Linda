@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 public class LindaBackupServer extends LindaServer {
     private LindaRemote reference;
@@ -52,13 +53,21 @@ public class LindaBackupServer extends LindaServer {
             }
         };
 
+        listenChangeServer();
         update.schedule(task, 0, SAVE_INTERVAL);
+    }
+
+    @Override
+    public void write(Tuple t) throws RemoteException {
+        super.write(t);
     }
 
     private void loadRemoteState(){
         if (!follow) {return;}
         try {
-            inner = reference.copy();
+            var cp =reference.copy();
+            inner = cp;
+            inner.initTransiant();
         } catch (RemoteException e) {
             follow = false;
             update.cancel();
@@ -67,7 +76,6 @@ public class LindaBackupServer extends LindaServer {
     }
 
     public void listenChangeServer() {
-
         try {
             reference.changeRegister(new ModificationCallback());
         } catch (RemoteException e) {
@@ -92,9 +100,19 @@ public class LindaBackupServer extends LindaServer {
             e.printStackTrace();
         }
         try {
-            var remote = (LindaRemote) Naming.lookup(sourceUri);
+            System.out.println("Test" + sourceUri);
+            var pat = Pattern.compile("(?:rmi://)?(.*):(\\d*)/(.*)");
 
+            var m = pat.matcher(sourceUri);
+            m.matches();
+            var host = m.group(1);
+            var rport = Integer.valueOf(m.group(2));
+            var remote = (LindaRemote) LocateRegistry.getRegistry(host, rport).lookup(m.group(3));
+            System.out.println("Test2");
+
+            System.out.println("Test3");
             LindaBackupServer backupServer = new LindaBackupServer(remote);
+            System.out.println("Test4");
 
             Registry registry = LocateRegistry.getRegistry(port);
             registry.bind("LindaBackupServer", backupServer);

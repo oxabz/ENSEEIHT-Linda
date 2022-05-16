@@ -71,5 +71,5 @@ public interface LindaRemote extends Remote {
 
     CentralizedLinda copy() throws RemoteException;
 
-    void changeRegister(ChangeCallback callback);
+    void changeRegister(ChangeCallback callback) throws RemoteException;
 }
