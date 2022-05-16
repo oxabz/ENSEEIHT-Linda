@@ -1,0 +1,5 @@
+out/
+.idea/
+mylinda.jar
+**/*.class
+TestVide.class
