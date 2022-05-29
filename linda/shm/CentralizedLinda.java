@@ -17,7 +17,6 @@ import java.io.ObjectOutputStream;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /** Shared memory implementation of Linda. */
@@ -45,7 +44,6 @@ public class CentralizedLinda implements Serializable, Linda {
         readCallbacks = new LinkedList<>();
         takeCallbacks = new LinkedList<>();
         everythingLock = new ReentrantReadWriteLock();
-
     }
 
     @Override
@@ -106,14 +104,12 @@ public class CentralizedLinda implements Serializable, Linda {
     public Tuple tryTake(Tuple template) {
         var lock = everythingLock.writeLock();
         lock.lock();
-        for (Tuple t : tuples
-        ) {
+        for (Tuple t : tuples) {
             if (t.matches(template)) {
                 tuples.remove(t);
                 lock.unlock();
                 return t;
             }
-
         }
         lock.unlock();
         return null;
@@ -297,15 +293,15 @@ public class CentralizedLinda implements Serializable, Linda {
     }
 
     public String debugToString(String prefix) {
-        String Etat= prefix+"\n";
+        String etat= prefix+"\n";
         var lock = everythingLock.readLock();
         lock.lock();
         for (Tuple tuple : tuples
         ) {
-            Etat = Etat+'\t'+tuple.toString();
+            etat = etat+'\t'+tuple.toString();
           }
         lock.lock();
-        return Etat;
+        return etat;
     }
 
     public void save(String path){
