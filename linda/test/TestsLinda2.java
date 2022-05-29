@@ -26,12 +26,6 @@ public class TestsLinda2 {
             Linda linda = new CentralizedLinda();
 
             public void test() {
-                orderedRun(()-> {
-
-                    linda.write(tupleA);
-                    linda.debug("write A");
-
-                } );
 
                 orderedRun(()-> {
 
@@ -51,8 +45,10 @@ public class TestsLinda2 {
 
                     linda.eventRegister(Linda.eventMode.READ, Linda.eventTiming.IMMEDIATE,motifA,t -> {
                         System.out.println("callback Read Immediate motifA " + t);
-                        linda.debug("apres callback read Immediate motif A");
+                        linda.debug("appel callback read Immediate motif A");
                     });
+
+                        linda.debug("eventregistry read immediate motif A");
 
                 });
 
@@ -60,27 +56,27 @@ public class TestsLinda2 {
 
                     linda.eventRegister(Linda.eventMode.READ, Linda.eventTiming.FUTURE,motifB,t -> {
                         System.out.println("callback Read immediate motifB " + t);
-                        linda.debug("apres callback read future motif B");
+                        linda.debug("appel callback read future motif B");
                     });
-
+                    linda.debug("eventregistry read future motif B");
                 });
 
                 orderedRun(()-> {
 
                     linda.eventRegister(Linda.eventMode.TAKE, Linda.eventTiming.FUTURE,motifC,t -> {
                         System.out.println("callback Take future motif C " + t);
-                        linda.debug("apres callback take future motif C");
+                        linda.debug("appel callback take future motif C");
                     });
-                    linda.debug("apres eventregistry take future motif C2");
+                    linda.debug(" eventregistry take future motif C");
                 });
 
                 orderedRun(()-> {
 
                     linda.eventRegister(Linda.eventMode.TAKE, Linda.eventTiming.IMMEDIATE,motifB,t -> {
                         System.out.println("callback Take immediate motifB " + t);
-                        linda.debug("apres callback take future motif B");
+                        linda.debug("appel du  callback take immediate motif B");
                     });
-
+                    linda.debug(" eventregistry take immediate motif B");
                 });
 
                 orderedRun(()-> {

@@ -21,7 +21,7 @@ public class TestsLinda1 {
         Tuple motifABC = new Tuple(Integer.class, String.class);
 
 
-        var test1 = new Test() { //test des Read Write et Take
+        var test1 = new Test() { //test des Read et Write
             Linda linda = new CentralizedLinda();
 
             @Override
@@ -29,25 +29,28 @@ public class TestsLinda1 {
                 orderedRun(() -> {
                     Tuple t = linda.read(motifA);
                     System.out.println("Tuple A lu : " + t);
+                    linda.debug("read motif A");
 
                 });
                 orderedRun(() -> {
                     linda.write(tupleC);
-                    linda.debug("write de TupleC");
+                    linda.debug("write du Tuple C");
                 });
                 orderedRun(() -> {
                     linda.write(tupleA);
-                    linda.debug("write de TupleA");
+                    linda.debug("write de Tuple A");
                 });
                 orderedRun(() -> {
                     Tuple t = linda.read(motifC);
-                    System.out.println("Tuple C lu : " + t);
+                    System.out.println("motif C lu : " + t);
+                    linda.debug("read motif C");
 
                 });
             }
         };
-     //test1.run();
+    // test1.run();
 
+    // test du write, take et takeAll
      var test2= new Test(){
          Linda linda = new CentralizedLinda();
 
@@ -60,25 +63,26 @@ public class TestsLinda1 {
              });
              orderedRun(() -> {
                  linda.write(tupleB);
-                 linda.debug("write de Tuple B");
+                 linda.debug("write de  B");
              });
              orderedRun(() -> {
                  linda.write(tupleC);
-                 linda.debug("write de Tuple C");
+                 linda.debug("write de  C");
              });
              orderedRun(() -> {
                  Tuple t =linda.take(motifC);
-                 linda.debug("take de Tuple C " + t.toString());
+                 linda.debug("take de motif C " + t);
              });
              orderedRun(() -> {
                  Collection<Tuple> t = linda.takeAll(motifAB);
-                 System.out.println("Take motif AB lu : " + t.toString());
+                 System.out.println("TakeAll motif AB  : " + t);
                  linda.debug("takeall");
              });
          }
      };
     // test2.run();
         // Write et TryRead et Trytake
+
         var test3 = new Test(){
             Linda linda = new CentralizedLinda();
             @Override
@@ -86,28 +90,29 @@ public class TestsLinda1 {
 
                 orderedRun(()-> {
                     linda.write(tupleA);
-                    linda.debug("apres write de A");
+                    linda.debug(" write de A");
                 });
 
                 orderedRun(()-> {
                     linda.write(tupleB);
-                    linda.debug("apres write de B");
+                    linda.debug(" write de B");
                 });
 
                  orderedRun(()-> {
 
-                    System.out.println("tryread de A " + linda.tryRead(motifA));
-                    linda.debug(" apres tryread de A");
+                    System.out.println("tryread de  motif A " + linda.tryRead(motifA));
+                    linda.debug(" tryread de motif A");
                 });
 
                 orderedRun(()-> {
-                    System.out.println("  tryTake de B " + linda.tryTake(motifB));
-                    linda.debug("apres take de B");
+                    System.out.println("  tryTake de motif  B " + linda.tryTake(motifB));
+                    linda.debug(" tryTake de motif B");
                 });
             }
         };
         //test3.run();
 
+       // System.out.println("------------------------------------------------------");
         // Write takeAll et ReadAll
 
         var test4 = new Test(){
