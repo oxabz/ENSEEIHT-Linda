@@ -68,10 +68,10 @@ public class TestsLinda2 {
                 orderedRun(()-> {
 
                     linda.eventRegister(Linda.eventMode.TAKE, Linda.eventTiming.FUTURE,motifC,t -> {
-                        System.out.println("callback Take immediate motif C " + t);
+                        System.out.println("callback Take future motif C " + t);
                         linda.debug("apres callback take future motif C");
                     });
-
+                    linda.debug("apres eventregistry take future motif C2");
                 });
 
                 orderedRun(()-> {
